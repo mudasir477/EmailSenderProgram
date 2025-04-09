@@ -54,3 +54,8 @@ To add a new type of email:
 - **Message Broker**: Can integrate a message broker to enqueue SMTP emails. 
 - **Unit Test**: Add unit tests to check if each part of the program works properly and keeps working when changes are made. 
 - **Job Time Execution**: I can also set the job execution times through App.config.
+## Documents
+
+- **Task 1 - Programming Task**: Fix bugs, improve performance, refactor code, integrate logging, and enhance configuration management.
+- **Task 2 - Theoretical Task**: Proposed a microservices based scalable architecture for the Email Sender Program  following separation of concerns concept.
+
