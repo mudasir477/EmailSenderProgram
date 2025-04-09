@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using Ardalis.GuardClauses;
+using Hangfire;
 using System;
 
 namespace EmailSenderProgram.Infrastructure
@@ -8,7 +9,7 @@ namespace EmailSenderProgram.Infrastructure
         private readonly IServiceProvider _serviceProvider;
         public HangfireActivator(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProvider = Guard.Against.Null(serviceProvider, nameof(serviceProvider));
         }
         public override object ActivateJob(Type jobType)
         {

@@ -1,8 +1,10 @@
-﻿using EmailSenderProgram.Emails.Base.Attributes;
+﻿using Ardalis.GuardClauses;
+using EmailSenderProgram.Emails.Base.Attributes;
 using EmailSenderProgram.Emails.Base.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 
@@ -15,7 +17,7 @@ namespace EmailSenderProgram.Extensions.Services
 
         public EmailNotifierRegistry(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProvider = Guard.Against.Null(serviceProvider, nameof(serviceProvider));
             _senderTypes = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
         }
 

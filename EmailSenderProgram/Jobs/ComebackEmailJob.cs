@@ -1,6 +1,8 @@
-﻿using EmailSenderProgram.Emails;
+﻿using Ardalis.GuardClauses;
+using EmailSenderProgram.Emails;
 using EmailSenderProgram.Extensions.Services;
 using EmailSenderProgram.Infrastructure.IManagers;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,11 @@ namespace EmailSenderProgram.Jobs
         public ComebackEmailJob(
             IVoucherManager voucherManager,
             EmailNotifierRegistry notifierRegistry
-            )
+        )
         {
-            _voucherManager = voucherManager;
-            _notifierRegistry = notifierRegistry;
-
+            _voucherManager = Guard.Against.Null(voucherManager, nameof(voucherManager));
+            _notifierRegistry = Guard.Against.Null(notifierRegistry, nameof(notifierRegistry));
+            
         }
 
         public async Task ExecuteAsync()

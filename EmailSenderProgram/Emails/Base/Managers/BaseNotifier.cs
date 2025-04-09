@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ardalis.GuardClauses;
 
 namespace EmailSenderProgram.Emails.Base.Managers
 {
@@ -21,9 +22,9 @@ namespace EmailSenderProgram.Emails.Base.Managers
             AppConfig configuration,
             ITemplateManager templateManager)
         {
-            _emailManager = emailManager;
-            _configuration = configuration;
-            _templateManager = templateManager;
+            _emailManager = Guard.Against.Null(emailManager, nameof(emailManager));
+            _configuration = Guard.Against.Null(configuration, nameof(configuration));
+            _templateManager = Guard.Against.Null(templateManager, nameof(templateManager));
         }
 
 

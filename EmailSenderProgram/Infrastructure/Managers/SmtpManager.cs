@@ -1,4 +1,5 @@
-﻿using EmailSenderProgram.Infrastructure.IManagers;
+﻿using Ardalis.GuardClauses;
+using EmailSenderProgram.Infrastructure.IManagers;
 using EmailSenderProgram.Models;
 using Serilog;
 using System;
@@ -16,7 +17,8 @@ namespace EmailSenderProgram.Infrastructure.Managers
 
         public SmtpManager(AppConfig configuration)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            
+            _configuration = Guard.Against.Null(configuration, nameof(configuration));
         }
 
         public async Task SendAsync(string to, string from, string subject, string body)
