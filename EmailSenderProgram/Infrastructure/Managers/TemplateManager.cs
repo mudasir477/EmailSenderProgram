@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace EmailSenderProgram.Infrastructure.Managers
 {
 
-    public class TemplateManger : ITemplateManager
+    public class TemplateManager : ITemplateManager
     {
         private readonly string _basePath;
 
-        public TemplateManger(string folderName)
+        public TemplateManager(string folderName)
         {
             if (string.IsNullOrWhiteSpace(folderName))
                 throw new ArgumentNullException(nameof(folderName));

@@ -19,7 +19,7 @@ namespace EmailSenderProgram.Extensions
 
             services.AddTransient<ISmtpManager, SmtpManager>();
             services.AddTransient<ITemplateManager>(sp =>
-                new TemplateManger(config.TemplatesFolderName));
+                new TemplateManager(config.TemplatesFolderName));
 
             return services;
         }

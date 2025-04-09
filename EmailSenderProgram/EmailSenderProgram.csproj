@@ -198,7 +198,7 @@
     <Compile Include="Models\AppConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Infrastructure\Managers\TemplateManger.cs" />
+    <Compile Include="Infrastructure\Managers\TemplateManager.cs" />
     <Compile Include="Infrastructure\Managers\SmtpManager.cs" />
   </ItemGroup>
   <ItemGroup>
