@@ -5,6 +5,7 @@ using EmailSenderProgram.Infrastructure.IManagers;
 using EmailSenderProgram.Infrastructure.Managers;
 using EmailSenderProgram.Models;
 using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Reflection;
 
 namespace EmailSenderProgram.Extensions
@@ -16,7 +17,7 @@ namespace EmailSenderProgram.Extensions
         {
             AppConfig config = AppConfig.GetInstance();
             services.AddSingleton(config);
-
+            services.AddTransient<IVoucherManager, VoucherManager>();
             services.AddTransient<ISmtpManager, SmtpManager>();
             services.AddTransient<ITemplateManager>(sp =>
                 new TemplateManager(config.TemplatesFolderName));
@@ -39,6 +40,13 @@ namespace EmailSenderProgram.Extensions
                 registry.AutoRegisterNotifiers(Assembly.GetExecutingAssembly());
                 return registry;
             });
+            return services;
+        }
+        public static IServiceCollection ConfigureSerilog(this IServiceCollection services)
+        {
+            var logFilePath = ConfigurationManager.AppSettings["LogFilePath"];
+            var rollingInterval = ConfigurationManager.AppSettings["RollingInterval"];
+            var isDebugMode = bool.TryParse(ConfigurationManager.AppSettings["IsDebugMode"], out bool debugMode) ? debugMode : true;
             return services;
         }
     }

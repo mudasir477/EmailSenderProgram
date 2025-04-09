@@ -14,6 +14,9 @@ namespace EmailSenderProgram.Models
         public string Password { get; set; }
         public string TemplatesFolderName { get; set; }
 
+        public string LogFilePath { get; set; }
+        public string RollingInterval { get; set; }
+
         private static readonly Lazy<AppConfig> lazyInstance =
             new Lazy<AppConfig>(() => new AppConfig());
 
@@ -27,6 +30,8 @@ namespace EmailSenderProgram.Models
             UserName = ConfigurationManager.AppSettings[Constants.ConfigurationKeys.UserName];
             Password = ConfigurationManager.AppSettings[Constants.ConfigurationKeys.Password];
             TemplatesFolderName = ConfigurationManager.AppSettings[Constants.ConfigurationKeys.TemplatesFolderName];
+            LogFilePath = ConfigurationManager.AppSettings[Constants.ConfigurationKeys.LogFilePath];
+            RollingInterval = ConfigurationManager.AppSettings[Constants.ConfigurationKeys.RollingInterval];
         }
 
         public static AppConfig GetInstance()

@@ -2,6 +2,7 @@
 using EmailSenderProgram.Emails.Base.Models;
 using EmailSenderProgram.Infrastructure.IManagers;
 using EmailSenderProgram.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace EmailSenderProgram.Emails.Base.Managers
         protected readonly ISmtpManager _emailManager;
         protected readonly AppConfig _configuration;
         protected readonly ITemplateManager _templateManager;
+        protected static readonly ILogger _logger = Log.ForContext<BaseNotifier>();
 
         protected BaseNotifier(
             ISmtpManager emailManager,
@@ -27,7 +29,7 @@ namespace EmailSenderProgram.Emails.Base.Managers
 
         public virtual async Task<EmailNotifierResult> SendEmailAsync(IDictionary<string, object> variables)
         {
-            Console.WriteLine($"[{GetType().Name}] Starting to send emails...");
+            _logger.Information("[{NotifierType}] Starting to send emails...", GetType().Name);
 
             var result = new EmailNotifierResult();
             var recipients = GetRecipients();
@@ -48,10 +50,11 @@ namespace EmailSenderProgram.Emails.Base.Managers
                     );
 
                     result.AddSuccess(recipient);
+                    _logger.Information("Email sent successfully to {RecipientEmail}", recipient.Email);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to send email to {recipient.Email}. Error: {ex.Message}");
+                    _logger.Error($"Failed to send email to {recipient.Email}. Error: {ex.Message}");
                     result.AddFailure(recipient);
                 }
             }

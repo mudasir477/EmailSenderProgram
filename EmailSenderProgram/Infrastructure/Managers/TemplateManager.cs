@@ -1,6 +1,7 @@
 ﻿using EmailSenderProgram.Infrastructure.IManagers;
 using Scriban;
 using Scriban.Runtime;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,7 @@ namespace EmailSenderProgram.Infrastructure.Managers
     public class TemplateManager : ITemplateManager
     {
         private readonly string _basePath;
+        protected static readonly ILogger _logger = Log.ForContext<TemplateManager>();
 
         public TemplateManager(string folderName)
         {
@@ -33,12 +35,12 @@ namespace EmailSenderProgram.Infrastructure.Managers
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine($"Template file not found: {templatePath}");
+                _logger.Information($"Template file not found: {templatePath}");
                 return string.Empty;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while loading template: {templateName}. Details: {ex.Message}");
+                _logger.Error($"Error while loading template: {templateName}. Details: {ex.Message}");
                 return string.Empty;
             }
         }

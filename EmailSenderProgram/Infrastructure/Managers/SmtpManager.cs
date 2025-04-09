@@ -1,5 +1,6 @@
 ﻿using EmailSenderProgram.Infrastructure.IManagers;
 using EmailSenderProgram.Models;
+using Serilog;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -11,6 +12,7 @@ namespace EmailSenderProgram.Infrastructure.Managers
     public class SmtpManager : ISmtpManager
     {
         private readonly AppConfig _configuration;
+        protected static readonly ILogger _logger = Log.ForContext<SmtpManager>();
 
         public SmtpManager(AppConfig configuration)
         {
@@ -21,7 +23,7 @@ namespace EmailSenderProgram.Infrastructure.Managers
         {
             if (_configuration.IsDebugMode)
             {
-                Console.WriteLine($"[Debug Mode] Would send mail to: {to}");
+                _logger.Information($"[Debug Mode] Would send mail to: {to}");
             }
             else
             {
@@ -46,7 +48,7 @@ namespace EmailSenderProgram.Infrastructure.Managers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error sending email to {to}: {ex.Message}");
+                    _logger.Error($"Error sending email to {to}: {ex.Message}");
                 }
             }
         }
