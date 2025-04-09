@@ -2,12 +2,13 @@
 using EmailSenderProgram.Extensions;
 using EmailSenderProgram.Extensions.Services;
 using EmailSenderProgram.Infrastructure.IManagers;
+using EmailSenderProgram.Jobs;
+using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 
@@ -30,23 +31,19 @@ namespace EmailSenderProgram
                     var registry = host.Services.GetRequiredService<EmailNotifierRegistry>();
                     var comebackSender = registry.GetNotifier(Constants.EmailNotifier.Comeback);
 
-                    var variables = new Dictionary<string, object>
-                    {
-                        { "VoucherCode", voucherManager.GetVoucherCode() },
-                    };
 
-                    var comebackResult = await comebackSender.SendEmailAsync(variables);
-                    logger.LogInformation($"Comeback email sent successfully? {comebackResult.IsSuccess()}");
+                    var jobClient = host.Services.GetRequiredService<IBackgroundJobClient>();
+                    var server = host.Services.GetRequiredService<BackgroundJobServer>();
 
+                    // Immediately enqueue the jobs for testing
+                    jobClient.Enqueue<ComebackEmailJob>(job => job.ExecuteAsync());
+                    jobClient.Enqueue<WelcomeEmailJob>(job => job.ExecuteAsync());
 
-                    if (DateTimeProvider.IsSunday())
-                    {
-                        var welcomeSender = registry.GetNotifier(Constants.EmailNotifier.Welcome);
-                        var welcomeResult = await welcomeSender.SendEmailAsync(new Dictionary<string, object> { });
-                        logger.LogInformation($"Welcome email sent successfully? {welcomeResult.IsSuccess()}");
-                    }
+                    // Uncomment the following code to schedule the recurring job.
+                    //ScheduleEmailJobs();
 
-                    Console.ReadKey();
+                    await host.RunAsync();
+
                 }
             }
             catch (Exception ex)
@@ -55,7 +52,7 @@ namespace EmailSenderProgram
             }
             finally
             {
-                Log.CloseAndFlush(); // Ensures logs are flushed to file and console
+                Log.CloseAndFlush();
             }
         }
         private static IHostBuilder CreateHostBuilder(string[] args)
@@ -66,7 +63,9 @@ namespace EmailSenderProgram
                {
                    services
                        .ConfigureManagers()
-                       .ConfigureEmailNotifierRegistery();
+                       .ConfigureEmailNotifierRegistery()
+                       .AddInMemoryHangfire()
+                       .ConfigureJobs();
                });
         }
 
@@ -81,6 +80,18 @@ namespace EmailSenderProgram
                .WriteTo.Console()
                .WriteTo.File(logFilePath, rollingInterval: (RollingInterval)Enum.Parse(typeof(RollingInterval), rollingInterval), shared: true)
                .CreateBootstrapLogger();
+        }
+        private static void ScheduleEmailJobs()
+        {
+            RecurringJob.AddOrUpdate<ComebackEmailJob>(
+                       "comeback-email-job",
+                       job => job.ExecuteAsync(),
+                       Cron.Daily);
+
+            RecurringJob.AddOrUpdate<WelcomeEmailJob>(
+                        "welcome-email-job",
+                        job => job.ExecuteAsync(),
+                        "0 8 * * 0"); // Cron expression for every Sunday at 8:00 AM 
         }
     }
 }

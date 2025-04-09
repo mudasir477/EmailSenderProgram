@@ -1,12 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 
 
 namespace EmailSenderProgram.Extensions
@@ -26,7 +20,7 @@ namespace EmailSenderProgram.Extensions
                     .WriteTo.File(
                         logFilePath,
                         rollingInterval: (RollingInterval)Enum.Parse(typeof(RollingInterval), rollingInterval),
-                        shared:true
+                        shared: true
                     );
             });
         }
