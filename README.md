@@ -46,10 +46,11 @@ To add a new type of email:
 5. Register your job class in `ServiceCollectionExtension.ConfigureJobs()`.
 6. Schedule your job in `Program.ScheduleEmailJobs()` using `RecurringJob.AddOrUpdate`.
 
-## Things to Improve
+## Things to Improve / TODO
 
 - **Secure Configuration**: Move sensitive info like the SMTP password to a secure location.
 - **Real Storage**: Switch to using a persistent database for Hangfire storage instead of in-memory storage.
 - **Retry System**: Add a service to try sending failed emails again.
 - **Message Broker**: Can integrate a message broker to enqueue SMTP emails. 
 - **Unit Test**: Add unit tests to check if each part of the program works properly and keeps working when changes are made. 
+- **Job Time Execution**: I can also set the job execution times through App.config.
