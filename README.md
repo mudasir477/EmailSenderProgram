@@ -1,7 +1,5 @@
 # EmailSenderProgram
 
-> **Target Framework**: .NET Framework 4.8
-> **Language Version**: C# 7.3 (Compatible with .NET Framework 4.8)
 
 A modular and extensible .NET Console Application designed to automate email delivery via scheduled background jobs using [Hangfire](https://www.hangfire.io/). It currently supports sending **Welcome Emails** and **Comeback Emails** using customizable HTML templates.
 
@@ -13,11 +11,13 @@ To run the program:
 2. Configure SMTP and other values in `App.config`.
 3. Build and run using Visual Studio or `dotnet`.
 
-## Installation
+## Installation 
 
+ **Requires:** .NET Framework 4.8 Language Version: C# 7.3  and Visual Studio 2019 or later.
 1. Open the solution `EmailSenderProgram.sln` in Visual Studio.
 2. Restore NuGet packages.
 3. Build the solution.
+
 
 ## Features
 
